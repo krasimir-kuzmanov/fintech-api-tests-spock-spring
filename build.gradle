@@ -1,0 +1,32 @@
+plugins {
+  id 'groovy'
+  id 'java'
+}
+
+group = 'com.example.fintech'
+version = '0.0.1'
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testImplementation platform('org.spockframework:spock-bom:2.4-M4-groovy-4.0')
+  testImplementation 'org.spockframework:spock-core'
+  testImplementation 'org.spockframework:spock-spring'
+
+  testImplementation 'org.springframework:spring-context:6.1.14'
+  testImplementation 'org.springframework:spring-test:6.1.14'
+
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+  useJUnitPlatform()
+}
