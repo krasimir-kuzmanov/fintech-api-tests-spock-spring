@@ -1,6 +1,7 @@
 package com.example.fintech.spock.config
 
 import com.example.fintech.spock.client.AuthClient
+import com.example.fintech.spock.client.AccountClient
 import com.example.fintech.spock.client.TestResetClient
 import java.net.http.HttpClient
 import java.time.Duration
@@ -22,6 +23,11 @@ class TestConfig {
   @Bean
   AuthClient authClient(HttpClient httpClient, ApiProperties apiProperties) {
     return new AuthClient(httpClient, apiProperties.baseUrl, apiProperties.timeoutMs)
+  }
+
+  @Bean
+  AccountClient accountClient(HttpClient httpClient, ApiProperties apiProperties) {
+    return new AccountClient(httpClient, apiProperties.baseUrl, apiProperties.timeoutMs)
   }
 
   @Bean
