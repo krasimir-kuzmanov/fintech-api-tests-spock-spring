@@ -3,6 +3,7 @@ package com.example.fintech.spock.specs
 import com.example.fintech.spock.client.AuthClient
 import com.example.fintech.spock.client.AccountClient
 import com.example.fintech.spock.client.TestResetClient
+import com.example.fintech.spock.client.TransactionClient
 import com.example.fintech.spock.config.TestConfig
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -25,11 +26,17 @@ abstract class BaseApiSpec extends Specification {
   @Autowired
   protected AccountClient accountClient
 
+  @Autowired
+  protected TransactionClient transactionClient
+
   def setup() {
     resetClient.reset()
   }
 
   protected static String newUsername() {
     return USERNAME_PREFIX + UUID.randomUUID()
+  }
+
+  protected static record AuthSession(String accountId, String token) {
   }
 }

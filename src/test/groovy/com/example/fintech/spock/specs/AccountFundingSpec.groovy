@@ -52,7 +52,4 @@ class AccountFundingSpec extends BaseApiSpec {
   private static Map<String, Object> parseJson(String body) {
     return (Map<String, Object>) new JsonSlurper().parseText(body)
   }
-
-  private record AuthSession(String accountId, String token) {
-  }
 }
