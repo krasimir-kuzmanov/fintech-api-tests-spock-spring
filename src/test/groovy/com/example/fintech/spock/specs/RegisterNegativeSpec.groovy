@@ -8,8 +8,6 @@ import static com.example.fintech.spock.constants.HttpStatusCodes.BAD_REQUEST
 
 class RegisterNegativeSpec extends BaseApiSpec {
 
-  private static final String EMPTY = ''
-
   @Unroll
   def 'register should fail for invalid input: #caseName'() {
     when:

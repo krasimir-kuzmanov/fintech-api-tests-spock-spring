@@ -22,6 +22,15 @@ class TransactionClient {
   }
 
   HttpResponse<String> makePayment(String fromAccountId, String toAccountId, BigDecimal amount, String token) {
+    return makePaymentWithAmountValue(fromAccountId, toAccountId, amount.toPlainString(), token)
+  }
+
+  HttpResponse<String> makePaymentWithAmountValue(
+      String fromAccountId,
+      String toAccountId,
+      Object amountValue,
+      String token
+  ) {
     HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + '/transaction/payment'))
         .timeout(Duration.ofMillis(timeoutMs))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -29,7 +38,7 @@ class TransactionClient {
         .POST(HttpRequest.BodyPublishers.ofString(JsonOutput.toJson([
           fromAccountId: fromAccountId,
           toAccountId: toAccountId,
-          amount: amount.toPlainString(),
+          amount: amountValue,
         ])))
         .build()
     return httpClient.send(request, HttpResponse.BodyHandlers.ofString())
