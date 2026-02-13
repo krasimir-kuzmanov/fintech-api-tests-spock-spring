@@ -1,11 +1,9 @@
 package com.example.fintech.spock.config
 
-class ApiProperties {
-  final String baseUrl
-  final int timeoutMs
+import org.springframework.boot.context.properties.ConfigurationProperties
 
-  ApiProperties(String baseUrl, int timeoutMs) {
-    this.baseUrl = baseUrl
-    this.timeoutMs = timeoutMs
-  }
+@ConfigurationProperties(prefix = 'fintech.api')
+class ApiProperties {
+  String baseUrl
+  int timeoutMs
 }

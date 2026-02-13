@@ -1,25 +1,31 @@
 package com.example.fintech.spock.config
 
 import com.example.fintech.spock.client.AuthClient
-import org.springframework.beans.factory.annotation.Value
+import com.example.fintech.spock.client.TestResetClient
+import java.net.http.HttpClient
+import java.time.Duration
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.PropertySource
 
 @Configuration
-@PropertySource('classpath:application-test.properties')
+@EnableConfigurationProperties(ApiProperties)
 class TestConfig {
 
   @Bean
-  ApiProperties apiProperties(
-      @Value('${fintech.api.base-url}') String baseUrl,
-      @Value('${fintech.api.timeout-ms}') int timeoutMs
-  ) {
-    return new ApiProperties(baseUrl, timeoutMs)
+  HttpClient httpClient(ApiProperties apiProperties) {
+    return HttpClient.newBuilder()
+        .connectTimeout(Duration.ofMillis(apiProperties.timeoutMs))
+        .build()
   }
 
   @Bean
-  AuthClient authClient(ApiProperties apiProperties) {
-    return new AuthClient(apiProperties.baseUrl)
+  AuthClient authClient(HttpClient httpClient, ApiProperties apiProperties) {
+    return new AuthClient(httpClient, apiProperties.baseUrl, apiProperties.timeoutMs)
+  }
+
+  @Bean
+  TestResetClient testResetClient(HttpClient httpClient, ApiProperties apiProperties) {
+    return new TestResetClient(httpClient, apiProperties.baseUrl, apiProperties.timeoutMs)
   }
 }
