@@ -16,6 +16,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Checkout backend repo
+        uses: actions/checkout@v4
+        with:
+          repository: krasimir-kuzmanov/fintech-backend
+          path: fintech-backend
+
       - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
@@ -30,6 +36,30 @@ jobs:
         with:
           cache-read-only: false
 
+      - name: Make Gradle wrappers executable
+        run: |
+          chmod +x ./gradlew
+          chmod +x fintech-backend/gradlew
+
+      - name: Start backend
+        run: |
+          cd fintech-backend
+          ./gradlew bootRun > backend.log 2>&1 &
+          echo $! > backend.pid
+
+      - name: Wait for backend health
+        run: |
+          for i in {1..60}; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health || true)
+            echo "Attempt $i backend health status: $code"
+            if [ "$code" = "200" ]; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Backend did not become healthy in time"
+          exit 1
+
       - name: Execute test suite
         run: ./gradlew clean test
 
@@ -39,3 +69,17 @@ jobs:
         with:
           name: test-report
           path: build/reports/tests/test
+
+      - name: Upload backend logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-log
+          path: fintech-backend/backend.log
+
+      - name: Stop backend
+        if: always()
+        run: |
+          if [ -f fintech-backend/backend.pid ]; then
+            kill "$(cat fintech-backend/backend.pid)" || true
+          fi
