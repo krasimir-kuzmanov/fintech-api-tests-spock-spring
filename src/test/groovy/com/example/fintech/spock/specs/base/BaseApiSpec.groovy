@@ -1,4 +1,4 @@
-package com.example.fintech.spock.specs
+package com.example.fintech.spock.specs.base
 
 import com.example.fintech.spock.client.AuthClient
 import com.example.fintech.spock.client.AccountClient

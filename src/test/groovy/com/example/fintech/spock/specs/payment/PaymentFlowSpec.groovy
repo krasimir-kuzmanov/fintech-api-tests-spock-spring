@@ -1,4 +1,6 @@
-package com.example.fintech.spock.specs
+package com.example.fintech.spock.specs.payment
+
+import com.example.fintech.spock.specs.base.BaseApiSpec
 
 import groovy.json.JsonSlurper
 

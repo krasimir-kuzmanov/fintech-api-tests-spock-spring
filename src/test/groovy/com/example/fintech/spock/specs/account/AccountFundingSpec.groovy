@@ -1,4 +1,6 @@
-package com.example.fintech.spock.specs
+package com.example.fintech.spock.specs.account
+
+import com.example.fintech.spock.specs.base.BaseApiSpec
 
 import java.net.http.HttpResponse
 

@@ -1,4 +1,6 @@
-package com.example.fintech.spock.specs
+package com.example.fintech.spock.specs.auth
+
+import com.example.fintech.spock.specs.base.BaseApiSpec
 
 import spock.lang.Unroll
 
@@ -15,7 +17,8 @@ class RegisterNegativeSpec extends BaseApiSpec {
 
     then:
     response.statusCode() == BAD_REQUEST
-    response.body().contains('"error"')
+    Map<String, Object> responseJson = parseJsonMap(response.body())
+    responseJson.error
 
     where:
     caseName         | username      | password

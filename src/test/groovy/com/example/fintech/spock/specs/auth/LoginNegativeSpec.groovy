@@ -1,4 +1,6 @@
-package com.example.fintech.spock.specs
+package com.example.fintech.spock.specs.auth
+
+import com.example.fintech.spock.specs.base.BaseApiSpec
 
 import spock.lang.Unroll
 
@@ -8,6 +10,7 @@ import static com.example.fintech.spock.constants.HttpStatusCodes.UNAUTHORIZED
 
 class LoginNegativeSpec extends BaseApiSpec {
 
+  private static final String INVALID_CREDENTIALS = 'INVALID_CREDENTIALS'
   private static final String WRONG_PASSWORD = 'wrong-password'
   private static final String UNKNOWN_USERNAME = 'no_such_user'
 
@@ -23,7 +26,8 @@ class LoginNegativeSpec extends BaseApiSpec {
 
     then:
     response.statusCode() == UNAUTHORIZED
-    response.body() != null
+    Map<String, Object> responseJson = parseJsonMap(response.body())
+    responseJson.error == INVALID_CREDENTIALS
 
     where:
     caseName         | loginUsernameKind       | loginPassword

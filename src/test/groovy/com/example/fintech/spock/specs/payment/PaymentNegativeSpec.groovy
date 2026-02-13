@@ -1,4 +1,6 @@
-package com.example.fintech.spock.specs
+package com.example.fintech.spock.specs.payment
+
+import com.example.fintech.spock.specs.base.BaseApiSpec
 
 import spock.lang.Unroll
 
@@ -32,8 +34,8 @@ class PaymentNegativeSpec extends BaseApiSpec {
 
     then:
     response.statusCode() in [BAD_REQUEST, CONFLICT]
-    response.body().contains('"error"')
-    response.body().contains(INSUFFICIENT_FUNDS)
+    Map<String, Object> responseJson = parseJsonMap(response.body())
+    responseJson.error == INSUFFICIENT_FUNDS
   }
 
   def 'payment should fail when from and to accounts are the same'() {
@@ -58,8 +60,8 @@ class PaymentNegativeSpec extends BaseApiSpec {
 
     then:
     response.statusCode() == BAD_REQUEST
-    response.body().contains('"error"')
-    response.body().contains(SAME_ACCOUNT_TRANSFER)
+    Map<String, Object> responseJson = parseJsonMap(response.body())
+    responseJson.error == SAME_ACCOUNT_TRANSFER
   }
 
   @Unroll
@@ -78,8 +80,8 @@ class PaymentNegativeSpec extends BaseApiSpec {
 
     then:
     response.statusCode() == BAD_REQUEST
-    response.body().contains('"error"')
-    response.body().contains(INVALID_AMOUNT)
+    Map<String, Object> responseJson = parseJsonMap(response.body())
+    responseJson.error == INVALID_AMOUNT
 
     where:
     caseName      | amountValue
