@@ -39,4 +39,12 @@ class AccountClient {
         .build()
     return httpClient.send(request, HttpResponse.BodyHandlers.ofString())
   }
+
+  HttpResponse<String> getBalanceWithoutAuth(String accountId) {
+    HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + '/account/' + accountId))
+        .timeout(Duration.ofMillis(timeoutMs))
+        .GET()
+        .build()
+    return httpClient.send(request, HttpResponse.BodyHandlers.ofString())
+  }
 }
