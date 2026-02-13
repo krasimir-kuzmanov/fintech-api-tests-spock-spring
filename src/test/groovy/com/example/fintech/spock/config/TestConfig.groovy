@@ -3,6 +3,7 @@ package com.example.fintech.spock.config
 import com.example.fintech.spock.client.AuthClient
 import com.example.fintech.spock.client.AccountClient
 import com.example.fintech.spock.client.TestResetClient
+import com.example.fintech.spock.client.TransactionClient
 import java.net.http.HttpClient
 import java.time.Duration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -28,6 +29,11 @@ class TestConfig {
   @Bean
   AccountClient accountClient(HttpClient httpClient, ApiProperties apiProperties) {
     return new AccountClient(httpClient, apiProperties.baseUrl, apiProperties.timeoutMs)
+  }
+
+  @Bean
+  TransactionClient transactionClient(HttpClient httpClient, ApiProperties apiProperties) {
+    return new TransactionClient(httpClient, apiProperties.baseUrl, apiProperties.timeoutMs)
   }
 
   @Bean
