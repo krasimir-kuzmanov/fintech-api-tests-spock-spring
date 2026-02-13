@@ -1,34 +1,11 @@
 package com.example.fintech.spock.specs
 
-import com.example.fintech.spock.client.AuthClient
-import com.example.fintech.spock.client.TestResetClient
-import com.example.fintech.spock.config.TestConfig
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestPropertySource
-import spock.lang.Specification
-
 import java.net.http.HttpResponse
 
-@ContextConfiguration(classes = TestConfig)
-@TestPropertySource(locations = 'classpath:application-test.properties')
-class AuthSpec extends Specification {
+import static com.example.fintech.spock.constants.HttpStatusCodes.CREATED
+import static com.example.fintech.spock.constants.HttpStatusCodes.OK
 
-  private static final String USERNAME_PREFIX = 'spock_'
-  private static final String DEFAULT_PASSWORD = 'password'
-
-  private static final int HTTP_OK = 200
-  private static final int HTTP_CREATED = 201
-
-  @Autowired
-  private TestResetClient resetClient
-
-  @Autowired
-  private AuthClient authClient
-
-  def setup() {
-    resetClient.reset()
-  }
+class AuthSpec extends BaseApiSpec {
 
   def 'should register and then login successfully'() {
     given:
@@ -47,18 +24,13 @@ class AuthSpec extends Specification {
     assertLoginSuccess(loginResponse)
   }
 
-  private static String newUsername() {
-    return USERNAME_PREFIX + UUID.randomUUID()
-  }
-
   private static void assertRegistrationSuccess(HttpResponse<String> response) {
-    assert response.statusCode() in [HTTP_OK, HTTP_CREATED]
+    assert response.statusCode() in [OK, CREATED]
     assert response.body().contains('"id"')
   }
 
   private static void assertLoginSuccess(HttpResponse<String> response) {
-    assert response.statusCode() == HTTP_OK
+    assert response.statusCode() == OK
     assert response.body().contains('"token"')
   }
-
 }
