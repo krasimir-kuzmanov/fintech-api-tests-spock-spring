@@ -58,6 +58,10 @@ abstract class BaseApiSpec extends Specification {
     return (Map<String, Object>) new JsonSlurper().parseText(body)
   }
 
+  protected static List<Map<String, Object>> parseJsonList(String body) {
+    return (List<Map<String, Object>>) new JsonSlurper().parseText(body)
+  }
+
   protected static record AuthSession(String accountId, String token) {
   }
 }
