@@ -2,16 +2,15 @@ package com.example.fintech.spock.specs
 
 import groovy.json.JsonSlurper
 
-import java.math.BigDecimal
 import java.net.http.HttpResponse
 
-import static com.example.fintech.spock.constants.HttpStatusCodes.CREATED
 import static com.example.fintech.spock.constants.HttpStatusCodes.OK
 
 class PaymentFlowSpec extends BaseApiSpec {
 
   private static final BigDecimal INITIAL_FUND = new BigDecimal('100.00')
   private static final BigDecimal PAYMENT_AMOUNT = new BigDecimal('40.00')
+
   private static final String TRANSACTION_STATUS_SUCCESS = 'SUCCESS'
 
   def 'should make payment and expose transaction to both accounts'() {
@@ -63,17 +62,6 @@ class PaymentFlowSpec extends BaseApiSpec {
     assertContainsTransaction(bobTransactions, transactionId)
   }
 
-  private AuthSession registerAndLogin(String username) {
-    HttpResponse<String> registerResponse = authClient.register(username, DEFAULT_PASSWORD)
-    assert registerResponse.statusCode() in [OK, CREATED]
-
-    HttpResponse<String> loginResponse = authClient.login(username, DEFAULT_PASSWORD)
-    assert loginResponse.statusCode() == OK
-
-    Map<String, Object> loginJson = parseJsonMap(loginResponse.body())
-    return new AuthSession(loginJson.userId as String, loginJson.token as String)
-  }
-
   private BigDecimal fetchBalance(String accountId, String token) {
     HttpResponse<String> balanceResponse = accountClient.getBalance(accountId, token)
     assert balanceResponse.statusCode() == OK
@@ -95,10 +83,6 @@ class PaymentFlowSpec extends BaseApiSpec {
 
   private static void assertContainsTransaction(List<Map<String, Object>> transactions, String transactionId) {
     transactions.any { Map<String, Object> transaction -> transaction.transactionId == transactionId }
-  }
-
-  private static Map<String, Object> parseJsonMap(String body) {
-    return (Map<String, Object>) new JsonSlurper().parseText(body)
   }
 
   private static List<Map<String, Object>> parseJsonList(String body) {

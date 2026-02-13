@@ -10,7 +10,6 @@ class LoginNegativeSpec extends BaseApiSpec {
 
   private static final String WRONG_PASSWORD = 'wrong-password'
   private static final String UNKNOWN_USERNAME = 'no_such_user'
-  private static final String EMPTY = ''
 
   @Unroll
   def 'login should fail for invalid credentials: #caseName'() {
