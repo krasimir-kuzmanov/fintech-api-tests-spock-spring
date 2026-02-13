@@ -1,6 +1,6 @@
-package com.example.fintech.spock.specs
+package com.example.fintech.spock.specs.payment
 
-import groovy.json.JsonSlurper
+import com.example.fintech.spock.specs.base.BaseApiSpec
 
 import java.net.http.HttpResponse
 
@@ -85,7 +85,4 @@ class PaymentFlowSpec extends BaseApiSpec {
     transactions.any { Map<String, Object> transaction -> transaction.transactionId == transactionId }
   }
 
-  private static List<Map<String, Object>> parseJsonList(String body) {
-    return (List<Map<String, Object>>) new JsonSlurper().parseText(body)
-  }
 }

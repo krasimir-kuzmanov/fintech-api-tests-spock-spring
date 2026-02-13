@@ -40,7 +40,7 @@ sdk env
 
 Run a single spec:
 ```bash
-./gradlew test --tests "com.example.fintech.spock.specs.PaymentFlowSpec"
+./gradlew test --tests "com.example.fintech.spock.specs.payment.PaymentFlowSpec"
 ```
 
 ## What the Suite Covers

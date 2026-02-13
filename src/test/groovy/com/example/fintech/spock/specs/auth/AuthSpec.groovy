@@ -1,4 +1,6 @@
-package com.example.fintech.spock.specs
+package com.example.fintech.spock.specs.auth
+
+import com.example.fintech.spock.specs.base.BaseApiSpec
 
 import java.net.http.HttpResponse
 
@@ -15,22 +17,16 @@ class AuthSpec extends BaseApiSpec {
     HttpResponse<String> registerResponse = authClient.register(username, DEFAULT_PASSWORD)
 
     then:
-    assertRegistrationSuccess(registerResponse)
+    registerResponse.statusCode() in [OK, CREATED]
+    Map<String, Object> registerJson = parseJsonMap(registerResponse.body())
+    registerJson.id
 
     when:
     HttpResponse<String> loginResponse = authClient.login(username, DEFAULT_PASSWORD)
 
     then:
-    assertLoginSuccess(loginResponse)
-  }
-
-  private static void assertRegistrationSuccess(HttpResponse<String> response) {
-    assert response.statusCode() in [OK, CREATED]
-    assert response.body().contains('"id"')
-  }
-
-  private static void assertLoginSuccess(HttpResponse<String> response) {
-    assert response.statusCode() == OK
-    assert response.body().contains('"token"')
+    loginResponse.statusCode() == OK
+    Map<String, Object> loginJson = parseJsonMap(loginResponse.body())
+    loginJson.token
   }
 }

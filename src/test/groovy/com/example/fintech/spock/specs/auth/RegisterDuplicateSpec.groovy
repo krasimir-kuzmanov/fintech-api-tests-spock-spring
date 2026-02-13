@@ -1,4 +1,6 @@
-package com.example.fintech.spock.specs
+package com.example.fintech.spock.specs.auth
+
+import com.example.fintech.spock.specs.base.BaseApiSpec
 
 import java.net.http.HttpResponse
 
@@ -19,7 +21,7 @@ class RegisterDuplicateSpec extends BaseApiSpec {
     then:
     firstRegistration.statusCode() in [OK, CREATED]
     secondRegistration.statusCode() == BAD_REQUEST
-    secondRegistration.body().contains('"error"')
-    secondRegistration.body().contains(USER_ALREADY_EXISTS)
+    Map<String, Object> secondRegistrationJson = parseJsonMap(secondRegistration.body())
+    secondRegistrationJson.error == USER_ALREADY_EXISTS
   }
 }

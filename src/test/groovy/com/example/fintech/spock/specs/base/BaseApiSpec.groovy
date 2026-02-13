@@ -1,4 +1,4 @@
-package com.example.fintech.spock.specs
+package com.example.fintech.spock.specs.base
 
 import com.example.fintech.spock.client.AuthClient
 import com.example.fintech.spock.client.AccountClient
@@ -56,6 +56,10 @@ abstract class BaseApiSpec extends Specification {
 
   protected static Map<String, Object> parseJsonMap(String body) {
     return (Map<String, Object>) new JsonSlurper().parseText(body)
+  }
+
+  protected static List<Map<String, Object>> parseJsonList(String body) {
+    return (List<Map<String, Object>>) new JsonSlurper().parseText(body)
   }
 
   protected static record AuthSession(String accountId, String token) {
