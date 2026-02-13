@@ -1,6 +1,7 @@
 package com.example.fintech.spock.specs
 
 import com.example.fintech.spock.client.AuthClient
+import com.example.fintech.spock.client.AccountClient
 import com.example.fintech.spock.client.TestResetClient
 import com.example.fintech.spock.config.TestConfig
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,6 +21,9 @@ abstract class BaseApiSpec extends Specification {
 
   @Autowired
   protected AuthClient authClient
+
+  @Autowired
+  protected AccountClient accountClient
 
   def setup() {
     resetClient.reset()
